@@ -2,7 +2,7 @@
  Coursera Data Science Specialization  
  Statistical Inference Course Project  
   
-I will create a report to answer the questions. Given the nature of the series, ideally I'll use knitr to create the reports and convert to a pdf. 
+I will create a report to answer the questions. Given the nature of the series, I'll use knitr to create the reports and convert to a pdf. 
 
 I'll illustrate via simulation and associated explanatory text, the properties of the distribution of the mean of 40 exponentials. I will show:
 
