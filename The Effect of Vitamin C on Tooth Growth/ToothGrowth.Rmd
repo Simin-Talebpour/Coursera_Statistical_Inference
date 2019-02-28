@@ -1,0 +1,131 @@
+---
+title: "The Effect of Vitamin C on Tooth Growth in Guinea Pigs"
+author: "Simin Talebpour"
+output:
+  html_document:
+    df_print: paged
+---
+
+##Overview
+
+In this project I want to analyze the effect of vitamin C on tooth growth in guinea pigs using ToothGrowth data in the R datasets package. First I'll perform some basic exploratory data analyses, and then use hypothesis tests to compare tooth growth by supplement type and dose level.
+
+## Exploratory data analyses
+
+```{r echo=FALSE, message=FALSE, warning=FALSE,'load required packages'}
+# Load required packages 
+library(ggplot2)
+```
+
+
+```{r load ToothGrowth Dataset}
+data("ToothGrowth")
+```
+
+
+```{r}
+str(ToothGrowth)
+```
+
+
+```{r}
+summary(ToothGrowth)  
+```
+
+```{r}
+unique(ToothGrowth$dose)
+```
+
+ToothGrowth data includes 60 observations of 3 variables:  
+**len**: numeric variable - tooth length   
+**supp**: factor variable with 2 levels: "OJ"( Orange Juice) and "VC"(Vitamin C)  
+**dose**: numeric valriable	- Dose in milligrams/day  
+
+Each animal received one of three dose levels of vitamin C (0.5, 1, and 2 mg/day) by one of two delivery methods, orange juice or ascorbic acid (a form of vitamin C and coded as VC). The responseis the length of odontoblasts (cells responsible for tooth growth) in 60 guinea pigs.
+
+```{r, 'box plot for dose'}
+ggplot(ToothGrowth, aes(x = factor(dose), y = len)) +
+  geom_boxplot(aes(fill = supp))+
+  facet_grid(.~supp)+
+  ggtitle("Tooth Growth vs. Dose Level for Each Supplement Type")+
+  xlab("Dose Level(mg/Day)")+
+  ylab("Tooth Length")
+      
+```
+
+Looking at box plots, I can say by increaing dosage, tooth growth increases for both delivery method(orange juice and Vitamin C).
+
+```{r, 'box plot for supp'}
+ggplot(ToothGrowth, aes(x = supp, y = len, fill = factor(dose))) +
+  geom_boxplot()+
+  facet_grid(.~dose)+
+  ggtitle("Tooth Growth vs. Supplement Type for Differnt Dose Levels ")+
+  xlab("Supplement Type")+
+  ylab("Tooth Length")
+```
+
+For lower dosages(0.5, 1) orange juice has been more effective, but for dosage = 2, we can't make a conclusion.
+
+##Hypothesis Tests
+
+I want to see how supplement type and dose level effects the tooth growth. Applying hypothesis tests, I will find my answer.
+
+###Hypothesis One
+
+The supplement type(orange juice or Vitamin C) doesn't effect the tooth growTH.
+
+```{r, 'hypothesis test to compare tooth growth by supp'}
+t.test(len ~ supp, ToothGrowth, paired = FALSE, var.equal = FALSE)
+
+```
+
+Since the p-value(0.06) is greater than my significant value(0.05), I fail to reject the null hypothesis.
+
+###Hypothesis Two
+
+The dose levels '1' and '2' have the same effect on the tooth growTH.
+
+```{r, 'hypothesis test to compare tooth growth by dose 1 and 2'}
+ToothGrowth12 <- subset(ToothGrowth, dose %in% c(1,2))
+t.test(len ~ dose, ToothGrowth12, paired = FALSE, var.equal = FALSE)
+
+```
+
+P-value(1.906e-05) is smaler than my significance value(0.05), so I reject the null hypothesis. Tooth growth is not the same for dose = 1 and dose = 2.
+
+###Hypothesis Three
+
+The dose levels '1' and '0.5' have the same effect on the tooth growTH.
+
+```{r, 'hypothesis test to compare tooth growth by dose 0.5 and 1'}
+ToothGrowth105 <- subset(ToothGrowth, dose %in% c(1,0.5))
+t.test(len ~ dose, ToothGrowth105, paired = FALSE, var.equal = FALSE)
+
+```
+
+P-value(1.268e-07) is smaler than my significance value(0.05), so I reject the null hypothesis. Tooth growth is not the same for dose = 1 and dose = 0.5.
+
+###Hypothesis Four
+
+The dose levels '2' and '0.5' have the same effect on the tooth growth.
+
+```{r, 'hypothesis test to compare tooth growth by dose 0.5 and 2'}
+ToothGrowth205 <- subset(ToothGrowth, dose %in% c(2,0.5))
+t.test(len ~ dose, ToothGrowth205, paired = FALSE, var.equal = FALSE)
+
+```
+
+P-value(4.398e-14) is smaler than my significance value(0.05), so I reject the null hypothesis. Tooth growth is not the same for dose = 2 and dose = 0.5.
+
+##Conclusion
+
+I investigated ToothGrowth dataset to see if there is any differnce in guinea pig's tooth growth based on the type and dose level of vitamin C supplement they recieved. To naswer this question I performed four independent two-sample t-tests assuming the followings:  
+- The two samples in each test are independent.  
+- The two samples in each test follow normal distributions.  
+- The two samples in each test have differnt variance.  
+
+These are my findings:  
+The supplement type doesn't effect the tooth growth, however the extra dose increases the tooth growth.
+
+
+
