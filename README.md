@@ -4,6 +4,6 @@
 
 This project consists of two parts:
 
-* A simulation exercise: Exponential Distribution Investigation
-* Basic inferential data analysis: The Effect of Vitamin C on Tooth Growth 
+* Exponential Distribution Investigation: a simulation exercise
+* The Effect of Vitamin C on Tooth Growth: a basic inferential data analysis
 
